@@ -10,17 +10,16 @@ class Field:
 
 
 class Name(Field):
-    
-    def name(self, value):
+
+    def __init__(self, value):
 
         if not value:
             raise ValueError("Name cannot be empty")
         super().__init__(value)
     pass
 
-
 class Phone(Field):
-    def phone(self, value):
+    def __init__(self, value):
 
         if not value or not value.isdigit() or len(value) != 10:
             raise ValueError("Phone cannot be empty")
@@ -39,25 +38,30 @@ class Record:
         if phone not in self.phones:
             self.phones.append(phone)
 
-    def remove_phone(self, phone):
-        for p in self.phones:
-            if p.value == phone:
-                self.phones.remove(p)
-
-    def edit_phone(self, old_phone, new_phone ):
-        for p in self.phones:
-            if p.value == old_phone:
-                p.value = new_phone
-                return True
-        return False
-
     def find_phone(self, phone):
         for p in self.phones:
             if p.value == phone:
                 return p
         return None
+    
+    def remove_phone(self, phone):
+        p = self.find_phone(phone)
+        if p.value == phone:
+            self.phones.remove(p)
+            return True
+        return False
 
+    def edit_phone(self, phone, new_p ):
+        p = self.find_phone(phone)
+        if not p:
+            raise ValueError("Old phone number not found")
+        new_p = Phone(new_p)
+        p.value = new_p.value
+        if p.value == new_p.value:
+            return True
+        return False
 
+    
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
@@ -75,6 +79,6 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-
-  
+ 
     pass
+
