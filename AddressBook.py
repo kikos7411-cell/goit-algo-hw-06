@@ -56,10 +56,7 @@ class Record:
         if not p:
             raise ValueError("Old phone number not found")
         new_p = Phone(new_p)
-        p.value = new_p.value
-        if p.value == new_p.value:
-            return True
-        return False
+        
 
     
 
